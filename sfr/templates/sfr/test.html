@@ -1,0 +1,17 @@
+{% extends 'sfr/base.html' %}
+
+{% block content %}
+<div class="addface-block">
+	<form action="{% url 'test' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<div style="text-align: center">
+            <button type="submit" class="c-button"> Проверить </button>
+        </div>
+	</form>
+	{% if result != "" %}
+            <h1 align="center"> Результат: {{ result }} </h1>
+	{% endif %}
+
+</div>
+{% endblock %}

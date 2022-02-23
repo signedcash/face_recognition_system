@@ -1,0 +1,17 @@
+{% extends 'sfr/base.html' %}
+
+{% block content %}
+<div class="sign-in-block">
+    <h1 style="color: white; text-align: center">Вход в систему</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="text-align: center">
+            <button type="submit" class="c-button"> Войти </button>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

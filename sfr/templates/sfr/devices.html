@@ -1,0 +1,33 @@
+{% extends 'sfr/base.html' %}
+
+{% block content %}
+	<div style="text-align: right; margin-right: 20%">
+	<form action="{% url 'add_device' %}">
+		<button type="submit" class="add-button"> Добавить устройство </button>
+	</form>
+</div>
+{% for d in devices_list %}
+<div class = device-block>
+	<ul class="list-articles">
+			<table style="width: 100%;">
+				<tr>
+					<td class="middlecol">
+						<h2>{{d.name}}</h2>
+						<p>Идкетификатор устройства: {{d.id}}</p>
+					</td>
+					<td class="rightcol-device">
+						<a href="{% url 'delete_device' d.id%}" class="delete_href"><p>Удалить</p></a>
+						{% if d.status %}
+							<a href="{% url 'off_device' d.id%}" class="delete_href"><p>Выключить</p></a>
+						{% else %}
+							<a href="{% url 'on_device' d.id%}" class="delete_href"><p>Включить</p></a>
+        				{% endif %}
+					</td>
+				</tr>
+			</table>
+	</ul>
+</div>
+{% empty %}
+	<h1 style="text-align: center; color: #9d999d"> Список устройств пуст. </h1>
+{% endfor %}
+{% endblock %}

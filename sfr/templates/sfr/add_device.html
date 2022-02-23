@@ -1,0 +1,13 @@
+{% extends 'sfr/base.html' %}
+
+{% block content %}
+<div class="addface-block">
+	<form action="{% url 'add_device' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<div style="text-align: center">
+            <button type="submit" class="c-button"> Добавить </button>
+        </div>
+	</form>
+</div>
+{% endblock %}

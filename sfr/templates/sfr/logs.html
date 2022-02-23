@@ -1,0 +1,33 @@
+{% extends 'sfr/base.html' %}
+{% load sfr_timezone %}
+{% block content %}
+
+<div align="center", style="margin-top: 50px">
+	<table class="logs">
+		<tr class="logs">
+			<th class="logs">Имя пользователя</th>
+			<th class="logs">Устройство</th>
+			<th class="logs">Дата</th>
+			<th class="logs">Время</th>
+		</tr>
+
+		{% for l in logs %}
+		<tr class="logs">
+			<td class="logs" width="280px">{{ l.face.name }}</td>
+			<td class="logs" width="280px">{{ l.device.name }}</td>
+			<td class="logs" >{%  get_moscow_date utc_dt=l.time_create %}</td>
+			<td class="logs">{% get_moscow_time utc_dt=l.time_create %}</td>
+		</tr>
+
+		{% empty %}
+			<tr class="logs">
+				<td class="logs"></td>
+				<td class="logs"></td>
+				<td class="logs"></td>
+				<td class="logs"></td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+
+{% endblock %}

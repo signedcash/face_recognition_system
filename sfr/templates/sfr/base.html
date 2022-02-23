@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ title }}</title>
+	<link type="text/css" href="{% static 'sfr/css/style.css' %}", rel="stylesheet" />
+</head>
+<body>
+{% block mainmenu %}
+
+{% if current_page != "Авторизация" %}
+    <ul class="menu-main">
+        {% if current_page == "Журнал" %}
+            <li><a href="{% url 'logs' %}" class="current">Журнал</a></li>
+        {% else %}
+            <li><a href="{% url 'logs' %}">Журнал</a></li>
+        {% endif %}
+
+        {% if current_page == "База лиц" %}
+            <li><a href="{% url 'faces' %}" class="current">База лиц</a></li>
+        {% else %}
+            <li><a href="{% url 'faces' %}">База лиц</a></li>
+        {% endif %}
+
+        {% if current_page == "Устройства" %}
+            <li><a href="{% url 'devices' %}" class="current">Устройства</a></li>
+        {% else %}
+            <li><a href="{% url 'devices' %}">Устройства</a></li>
+        {% endif %}
+
+        {% if current_page == "Тест" %}
+            <li><a href="{% url 'test' %}" class="current">Тест</a></li>
+        {% else %}
+            <li><a href="{% url 'test' %}">Тест</a></li>
+        {% endif %}
+
+        <li><a href="{% url 'logout' %}">Выход</a></li>
+    </ul>
+{% endif %}
+
+{% endblock mainmenu %}
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

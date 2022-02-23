@@ -1,0 +1,36 @@
+{% extends 'sfr/base.html' %}
+
+{% block content %}
+<div style="text-align: right; margin-right: 10%">
+	<form action="{% url 'add_face' %}">
+		<button type="submit" class="add-button"> Добавить лицо </button>
+	</form>
+</div>
+{% for f in faces_list %}
+<div class = face-block>
+	<ul class="list-articles">
+			<table>
+				<tr>
+					<td class="leftcol">
+						{% if f.img %}
+							<div class="image-block">
+								<p><img class="face-img" src="{{ f.img.url }}"></p>
+							</div>
+						{% endif %}
+					</td>
+					<td class="middlecol">
+						<h2>{{f.name}}</h2>
+						<p>Дата добавления: {{f.time_update|date:"d-m-Y H:i:s"}}</p>
+					</td>
+					<td class="rightcol">
+						<a href="{% url 'delete_face' f.id%}" class="delete_href"><p>Удалить</p></a>
+					</td>
+				</tr>
+			</table>
+	</ul>
+</div>
+{% empty %}
+	<h1 style="text-align: center; color: #9d999d"> База лиц пуста. </h1>
+{% endfor %}
+
+{% endblock %}
