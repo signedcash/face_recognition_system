@@ -1,15 +1,23 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.db import models
+from rest_framework import generics
 from django.views.generic import ListView
-
+from rest_framework.permissions import IsAuthenticated
+import json
 from sfr.forms import SignInUserForm, AddFaceForm, AddDeviceForm, TestForm
-from sfr.models import Face, Device, Log
+from sfr.models import Face, Device, Log, FaceRec, ImageFace
+from sfr.serializers import FaceRecSerializer
 from sfr.utils import overfitting_rec, test_rec
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 menu = ["Журнал", "Устройства", "Лица", "Настройки"]
 
@@ -19,8 +27,8 @@ def index(request):
 
 
 def logs(request):
-    log_list = Log.objects.filter(user=request.user).order_by('-time_create')
     if request.user.is_authenticated:
+        log_list = Log.objects.filter(user=request.user).order_by('-time_create')
         return render(request, 'sfr/logs.html', {'title': 'Журнал активности',
                                                  'menu': menu,
                                                  'current_page': 'Журнал',
@@ -38,6 +46,28 @@ def devices(request):
                                                     'devices_list': devices_list})
     else:
         return redirect('signin')
+
+
+class FaceRecViewSet(generics.ListAPIView):
+    queryset = FaceRec.objects.all()
+    serializer_class = FaceRecSerializer
+
+    def get(self, request, *args, **kwargs):
+        file = request.data.get('img')
+        device_id = request.data.get('device')
+        code_device = request.data.get('code')
+        device = Device.objects.get(pk=device_id)
+
+        if device.code == code_device:
+            user = device.user
+            face = FaceRec.objects.create(img=file, device=device)
+            pred_face = test_rec(user, face)
+            if pred_face:
+                print(pred_face.name)
+                log = Log.objects.create(device=device, user=device.user, face=pred_face)
+                print(log)
+                return HttpResponse(json.dumps({'result': 1}), status=200)
+        return HttpResponse(json.dumps({'result': 0}), status=200)
 
 
 def test(request):
@@ -74,7 +104,11 @@ def add_face(request):
             form = AddFaceForm(request.POST, request.FILES, user=request.user)
             if form.is_valid():
                 form.cleaned_data['user'] = request.user
-                Face.objects.create(**form.cleaned_data)
+
+                face = Face.objects.create(**form.cleaned_data)
+                for img in request.FILES.getlist('img'):
+                    form.cleaned_data['img'] = img
+                    ImageFace.objects.create(img=img, face=face, user=request.user)
                 overfitting_rec(request.user)
                 return redirect('faces')
         else:
@@ -139,6 +173,7 @@ def delete_face(request, face_id):
     del_data = Face.objects.get(pk=face_id)
     if del_data.user == request.user:
         del_data.delete()
+    overfitting_rec(request.user)
     return redirect('faces')
 
 

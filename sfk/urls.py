@@ -22,7 +22,8 @@ from sfr.views import logs
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sfr.urls'))
+    path('', include('sfr.urls')),
+    path('api/', include('rest.urls')),
 ]
 
 if settings.DEBUG:

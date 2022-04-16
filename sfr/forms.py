@@ -32,7 +32,8 @@ class AddFaceForm(forms.ModelForm):
                                            'placeholder': 'Название'}),
             'type': forms.TextInput(attrs={'class': 'form-input',
                                            'placeholder': 'Описание'}),
-            'img': forms.FileInput(attrs={'class': 'inputfile-c'}),
+            'img': forms.FileInput(attrs={'class': 'inputfile-c',
+                                          'multiple': True}),
         }
 
 
@@ -53,11 +54,14 @@ class AddDeviceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddDeviceForm, self).__init__(*args, **kwargs)
         self.fields['name'].label = ''
+        self.fields['code'].label = ''
 
     class Meta:
         model = Device
-        fields = ['name']
+        fields = ['name', 'code']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input',
                                            'placeholder': 'Название'}),
+            'code': forms.TextInput(attrs={'class': 'form-input',
+                                           'placeholder': 'Пароль устройства'}),
         }

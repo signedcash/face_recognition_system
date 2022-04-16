@@ -16,4 +16,5 @@ urlpatterns = [
     path('delete_device/<int:device_id>/', delete_device, name='delete_device'),
     path('off_device/<int:device_id>/', off_device, name='off_device'),
     path('on_device/<int:device_id>/', on_device, name='on_device'),
+    path('facerec/', FaceRecViewSet.as_view(), name='facerec')
 ]

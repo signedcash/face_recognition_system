@@ -2,6 +2,7 @@
 {% load sfr_timezone %}
 {% block content %}
 
+{% if logs is not defined %}
 <div align="center", style="margin-top: 50px">
 	<table class="logs">
 		<tr class="logs">
@@ -18,16 +19,11 @@
 			<td class="logs" >{%  get_moscow_date utc_dt=l.time_create %}</td>
 			<td class="logs">{% get_moscow_time utc_dt=l.time_create %}</td>
 		</tr>
-
-		{% empty %}
-			<tr class="logs">
-				<td class="logs"></td>
-				<td class="logs"></td>
-				<td class="logs"></td>
-				<td class="logs"></td>
-			</tr>
 		{% endfor %}
 	</table>
 </div>
+{% else %}
+	<h1 style="text-align: center; color: #9d999d"> Журнал пуст </h1>
+{% endif %}
 
 {% endblock %}

@@ -9,8 +9,10 @@
             <button type="submit" class="c-button"> Проверить </button>
         </div>
 	</form>
-	{% if result != "" %}
-            <h1 align="center"> Результат: {{ result }} </h1>
+	{% if result %}
+            <h1 align="center"> Результат: {{ result.name }} </h1>
+	{% else %}
+			<h1 align="center"> Результат: не разпознано </h1>
 	{% endif %}
 
 </div>

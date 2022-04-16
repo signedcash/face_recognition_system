@@ -6,6 +6,7 @@ class Device(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
+    code = models.CharField(max_length=255)
 
 
 class Face(models.Model):
@@ -15,6 +16,13 @@ class Face(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
+
+
+class ImageFace(models.Model):
+    img = models.ImageField(upload_to="images/%Y/%m/%d/")
+    face = models.ForeignKey(Face, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_create = models.DateTimeField(auto_now_add=True)
 
 
 class Classifier(models.Model):
@@ -28,6 +36,12 @@ class Log(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     face = models.ForeignKey(Face, on_delete=models.CASCADE)
+    time_create = models.DateTimeField(auto_now_add=True)
+
+
+class FaceRec(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="images/%Y/%m/%d/")
     time_create = models.DateTimeField(auto_now_add=True)
 
 # Create your models here.

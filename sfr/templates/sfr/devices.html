@@ -14,9 +14,11 @@
 					<td class="middlecol">
 						<h2>{{d.name}}</h2>
 						<p>Идкетификатор устройства: {{d.id}}</p>
+						<p>Пароль устройства: {{d.code}}</p>
 					</td>
 					<td class="rightcol-device">
 						<a href="{% url 'delete_device' d.id%}" class="delete_href"><p>Удалить</p></a>
+						<br>
 						{% if d.status %}
 							<a href="{% url 'off_device' d.id%}" class="delete_href"><p>Выключить</p></a>
 						{% else %}
